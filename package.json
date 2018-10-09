@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "HannawithanH",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -17,5 +17,14 @@
     "react-router-dom": "^4.2.2"
   },
   "license": "ISC",
-  "homepage": "https://github.com/HannahwithoutanH/HannawithanH"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hlmitchell/HannawithanH.git"
+  },
+  "keywords": [],
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/hlmitchell/HannawithanH/issues"
+  },
+  "homepage": "https://github.com/hlmitchell/HannawithanH#readme",
 }
