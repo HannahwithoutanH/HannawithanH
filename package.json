@@ -4,17 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
-    "build": "next build",
-    "start": "node index.js",
-    "postinstall": "next build"
-  },
-  "dependencies": {
-    "express": "^4.15.4",
-    "next": "7.0.1",
-    "react": "16.5.2",
-    "react-dom": "16.5.2",
-    "react-router-dom": "^4.2.2"
+    "start": "nodemon src/server/server.js"
   },
   "license": "ISC",
   "repository": {
@@ -27,4 +17,10 @@
     "url": "https://github.com/hlmitchell/HannawithanH/issues"
   },
   "homepage": "https://github.com/hlmitchell/HannawithanH#readme",
+  "dependencies": {
+    "express": "^4.15.4",
+    "react": "16.5.2",
+    "react-dom": "16.5.2",
+    "react-router-dom": "^4.2.2"
+  }
 }
