@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 const { Pool } = require('pg')
 const app = express();
 
@@ -9,7 +10,7 @@ const app = express();
 // re-usable open client instances (reduces latency whenever a client can be reused). You definitely do 
 // not want to call pool.end() when your query completes, you want to reserve that for when your application 
 // terminates because pool.end() disposes of all the open client instances.
-const pool = new Pool();
+const pool = new Pool(process.env.PGDATABASE);
 
 pool.connect();
 
