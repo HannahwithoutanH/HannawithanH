@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/hlmitchell/HannawithanH#readme",
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "pg": "^7.5.0"
   }
 }
