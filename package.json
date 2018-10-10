@@ -22,12 +22,8 @@
   "dependencies": {
     "dotenv": "^6.1.0",
     "express": "^4.15.4",
-<<<<<<< HEAD
-    "next": "^7.0.1",
-=======
     "passport": "^0.4.0",
     "passport-google-oauth": "^1.0.0",
->>>>>>> 40bef334f5c6a8bd6323809fa6b4e4aaa231ad28
     "pg-promise": "^8.5.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
