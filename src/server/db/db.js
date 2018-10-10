@@ -3,7 +3,7 @@ const pgp = require('pg-promise')();
 const db = pgp(process.env.ELEPHANT_SQL);
 
 module.exports = {
-  insertUser: (...args) => {
+  insertUser: async (...args) => {
     // six parameters must be passed
     if (args.length < 6) throw new Error('Must pass full name, email, location, type, password, and phone number')
     // column names in database
@@ -11,88 +11,66 @@ module.exports = {
     // SQL command to insert a new row into the "Users" table
     const text = `INSERT INTO "Users" (${columns.join(',')}) VALUES('${args.join("','")}') RETURNING *`;
     // invoke SQL command
-    db.query(text)
-    .then((data) => {
-      console.log('data', data);
-    })
-    .catch((err) => {
-      if (err.constraint === 'Users_email_key') console.log('No duplicate emails allowed');
-      else console.log(err);
-    })
+    return await db.query(text);
   },
 
-  insertEvent: (...args) => {
+  getUser: async (email) => {
+    if (typeof email !== 'string') throw new Error('Email must be string');
+    return await db.query(`SELECT * FROM "Users" WHERE email='${email}'`);
+  },
+
+  insertEvent: async (...args) => {
     // eight parameters must be passed
-    if (args.length < 8) throw new Error('Must pass host, title, service, location, date, fee, time, description, status');
+    if (args.length < 8) throw new Error('Must pass host, title, service, location, date, fee, description, status');
     // column names in database
     const columns = ['host', 'title', 'service', 'location', 'date', 'fee', 'description', 'status'];
-    // SQL command to insert a new row into the "Events" table
-    const text = `INSERT INTO "Events" (${columns.join(',')}) VALUES('${args.join("','")}') RETURNING *`;
     // invoke SQL command
-    db.query(text)
-    .then((data) => {
-      console.log('data', data);
-    })
-    .catch((err) => {
-      if (err.constraint === 'Events_fk0') console.log('Foreign key host does not match');
-      else console.log(err);
-    })
+    return await db.query(`INSERT INTO "Events" (${columns.join(',')}) VALUES('${args.join("','")}') RETURNING *`);
   },
 
-  insertRSVPS: (...args) => {
-    // two parameters must be passed
-    if (args.length < 2) throw new Error('Must pass event id and user id');
-    // column names in database
-    const columns = ['event', 'attendee'];
-    // SQL command to insert a new row into the "Events" table
-    const text = `INSERT INTO "RSVPS" (${columns.join(',')}) VALUES('${args.join("','")}') RETURNING *`;
-    // invoke SQL command
-    db.query(text)
-    .then((data) => {
-      console.log('data', data);
-    })
-    .catch((err) => {
-      if (err.constraint === 'RSVPS_fk0') console.log("Event doesn't exist");
-      else if (err.constraint === 'RSVPS_fk1') console.log("User doesn't exist");
-      else console.log(err);
-    })
+  getEvent: async (eventId) => {
+      // eventId must be number
+      if (typeof eventId !== 'number') throw new Error('Must pass number');
+      return await db.query(`SELECT * FROM "Events" WHERE "Id"=${eventId}`);
   },
 
-  getUser: (email) => {
-    db.query(`SELECT * FROM "Users" WHERE email='${email}'`)
-    .then(data => {
-      console.log(data);
-    })
-    .catch(err => {
-      console.log(err);
-    })
+  cancelEvent: async (eventId) => {
+      // eventId must be number
+      if (typeof eventId !== 'number') throw new Error('Must pass a number');
+      return await db.query(`UPDATE "Events" SET status='cancelled' WHERE "Id"=${eventId}`);
   },
 
-  getRSVPList: () => {
-
+  insertRSVPS: async (...args) => {
+      // two parameters must be passed
+      if (args.length < 2) throw new Error('Must pass event id and user id');
+      // column names in database
+      const columns = ['event', 'attendee'];
+      // invoke SQL command
+      return await db.query(`INSERT INTO "RSVPS" (${columns.join(',')}) VALUES('${args.join("','")}') RETURNING *`);
   },
 
-  getHostedEvents: () => {
-
+  getUsersRSVPList: async (userId) => {
+    if (typeof userId !== 'number') throw new Error('Must pass a number');
+    return await db.query(`SELECT * FROM "RSVPS" WHERE attendee='${userId}'`);
   },
 
-  getEventByService: (service) => {
-    db.query(`SELECT * FROM "Events" WHERE service='${service}'`)
-    .then(data => {
-      console.log(data);
-    })
-    .catch(err => {
-      console.log(err);
-    })
+  getEventsRSVPList: async (eventId) => {
+    if (typeof eventId !== 'number') throw new Error('Must pass a number');
+    return await db.query(`SELECT name, email, number FROM "RSVPS" LEFT JOIN "Users" ON "Users"."Id"="RSVPS".attendee WHERE event='${eventId}'`);
   },
 
-  getEventByLocation: (location) => {
-    db.query(`SELECT * FROM "Events" WHERE location='${location}'`)
-    .then(data => {
-      console.log(data);
-    })
-    .catch(err => {
-      console.log(err);
-    })
+  getHostedEvents: async (hostId) => {
+    if (typeof hostId !== 'number') throw new Error('Must pass a number');
+    return await db.query(`SELECT * FROM "Events" WHERE host='${hostId}'`);
+  },
+
+  getEventByService: async (service) => {
+    if (typeof service !== 'string') throw new Error('Must pass a string');
+    return await db.query(`SELECT * FROM "Events" WHERE service='${service}'`);
+  },
+
+  getEventByLocation: async (location) => {
+    if (typeof location !== 'string') throw new Error('Must pass a string');
+    return await db.query(`SELECT * FROM "Events" WHERE location='${location}'`);
   }
 }

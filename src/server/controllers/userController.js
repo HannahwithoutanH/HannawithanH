@@ -8,7 +8,7 @@ module.exports = {
   getUserData: (req, res, next) => {
     // db.getUser('fake@gmail.com');
   },
-  getUsersAttendingEvent(req, res, next) => {
+  getUsersAttendingEvent: (req, res, next) => {
     
   }
 }
