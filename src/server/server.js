@@ -1,11 +1,7 @@
 const express = require('express');
-<<<<<<< HEAD
-const server = express();
-=======
 require('dotenv').config();
 const app = express();
 const db = require('./db/db.js');
->>>>>>> 4c0a9be692857a2ea8cfc0a9d4110fae3cbe6678
 
 
 
