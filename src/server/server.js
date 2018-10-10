@@ -2,6 +2,9 @@ const express = require('express');
 require('dotenv').config();
 const app = express();
 const db = require('./db/db.js');
+const userController = require('./controllers/userController.js');
+
+userController.getUserData();
 
 app.listen(3000, (err) => {
   if (err) console.log(err);
