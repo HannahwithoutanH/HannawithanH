@@ -3,10 +3,7 @@ require('dotenv').config();
 const app = express();
 const db = require('./db/db.js');
 const userController = require('./controllers/userController.js');
-
-userController.getUserData();
-
-
+const eventsController = require('./controllers/userController.js');
 
 
 sever.listen(3000, (err) => {
