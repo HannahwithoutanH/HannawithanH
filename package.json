@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/server/server.js"
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
   },
   "license": "ISC",
   "repository": {
@@ -23,8 +25,8 @@
     "passport": "^0.4.0",
     "passport-google-oauth": "^1.0.0",
     "pg-promise": "^8.5.0",
-    "react": "16.5.2",
-    "react-dom": "16.5.2",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
     "react-router-dom": "^4.2.2"
   },
   "devDependencies": {
