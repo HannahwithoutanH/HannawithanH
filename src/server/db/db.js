@@ -23,6 +23,18 @@ module.exports = {
     })
   },
 
+  getUser: (email) => {
+    return new Promise((resolve, reject) => {
+      db.query(`SELECT * FROM "Users" WHERE email='${email}'`)
+      .then(data => {
+        resolve(data);
+      })
+      .catch(err => {
+        reject(err);
+      })
+    })
+  },
+
   insertEvent: (...args) => {
     return new Promise((resolve, reject) => {
       // eight parameters must be passed
@@ -39,6 +51,36 @@ module.exports = {
       .catch((err) => {
         if (err.constraint === 'Events_fk0') reject('Foreign key host does not match');
         else reject(err);
+      })
+    })
+  },
+
+  getEvent: (eventId) => {
+    return new Promise((resolve, reject) => {
+      // title must be number
+      if (typeof eventId !== 'number') throw new Error('Must pass number');
+      db.query(`SELECT * FROM "Events" WHERE "Id"=${eventId}`)
+      .then((data) => {
+        console.log(data);
+        resolve(data);
+      })
+      .catch((err) => {
+        reject(err);
+      })
+    })
+  },
+
+  cancelEvent: (eventId) => {
+    return new Promise((resolve, reject) => {
+      // title must be number
+      if (typeof eventId !== 'number') throw new Error('Must pass number');
+      db.query(`UPDATE "Events" SET status='cancelled' WHERE "Id"=${eventId}`)
+      .then((data) => {
+        console.log(data);
+        resolve(data);
+      })
+      .catch((err) => {
+        reject(err);
       })
     })
   },
@@ -64,9 +106,9 @@ module.exports = {
     })
   },
 
-  getUser: (email) => {
+  getUsersRSVPList: (userId) => {
     return new Promise((resolve, reject) => {
-      db.query(`SELECT * FROM "Users" WHERE email='${email}'`)
+      db.query(`SELECT * FROM "RSVPS" WHERE attendee='${userId}'`)
       .then(data => {
         resolve(data);
       })
@@ -76,9 +118,15 @@ module.exports = {
     })
   },
 
-  getRSVPList: () => {
+  getEventsRSVPList: (event) => {
     return new Promise((resolve, reject) => {
-      
+      db.query(`SELECT name, email, number FROM "RSVPS" LEFT JOIN "Users" ON "Users"."Id"="RSVPS".attendee WHERE event='${event}'`)
+      .then(data => {
+        resolve(data);
+      })
+      .catch(err => {
+        reject(err);
+      })
     })
   },
 

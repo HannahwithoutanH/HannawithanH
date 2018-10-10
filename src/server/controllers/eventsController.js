@@ -17,7 +17,12 @@ module.exports = {
   getEventByService: (req, res, next) => {
     // db.getEventByService('');
   },
-  addRVSP: (req, res, next) => {
+  addRSVP: (req, res, next) => {
     // db.insertRSVPS(4, 25);
+  },
+  cancelRSVP: (req, res, next) => {
+
+  },
+  getRSVPList: (req, res, next) => {
   }
 }
