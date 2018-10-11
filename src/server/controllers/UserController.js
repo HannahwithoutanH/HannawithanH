@@ -1,11 +1,14 @@
-const db = require('../db/db.js');
+const db = require('../db/db');
+const getPubKey = require('../utils/crypt').getPublicKeyFromEmail;
+
 
 class UserController {
 
 
   createUser(req,res,next){
     const {username, password, email} = req.body;
-    db.addUser(username,email,password)
+    publicKey = getPubKey(email);
+    db.addUser(username,email,password,publicKey)
     .then(next())
     .catch(err=>res.send(err));
   }
