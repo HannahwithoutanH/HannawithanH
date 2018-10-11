@@ -1,13 +1,18 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
-require('dotenv').config();
+const bodyParser = require('body-parser');
+const userController = require('./controllers/UserController');
 
-const app = express();
-const db = require('./db/db.js');
+const server = express();
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({     
+  extended: true
+}));
+server.use(express.static(path.join(__dirname, '../../dist/static')));
 
-app.use(express.static(path.join(__dirname, '../../dist/static')));
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, '../.././dist/static/index.html')));
 
-app.listen(3000, () => {
-  console.log('Listening on port 3000');
-});
+server.post('/signup', userController.createUser, authController.sendToken);
+server.post('/login', userController.verifyCreds, authController.sendToken);
+
+server.listen(3000, () => console.log('Listening on port 3000'));
