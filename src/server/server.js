@@ -12,7 +12,6 @@ server.use(bodyParser.urlencoded({
   extended: true
 }));
 server.use(express.static(path.join(__dirname, '../../dist/static')));
-console.log(authController.checkToken);
 server.use(authController.checkToken);
 
 
