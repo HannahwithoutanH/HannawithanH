@@ -1,12 +1,9 @@
 import React from 'react';
-import {
-  BrowserRouter as Router, Switch, Route, Redirect,
-} from 'react-router-dom';
 
 import MessageList from './MessageList';
-import sendMessage from './SendMessage';
+import SendMessage from './SendMessage';
 
-class MessageContainer extends Component {
+class MessageContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
