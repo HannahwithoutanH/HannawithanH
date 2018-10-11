@@ -43,7 +43,7 @@ module.exports = {
    */
   changePassword: async (email, origPass, newPass) => {
     if (typeof origPass !== 'string' && typeof email !== 'string') throw new Error('Invalid argument types');
-    return await db.query(`UPDATE "Users" SET password=crypt('${newPass}', gen_salt('bf')) WHERE email='${email}' AND password=crypt('${origPass}', password)`);
+    return await db.query(`UPDATE "Users" SET password=crypt('${newPass}', gen_salt('bf')) WHERE email='${email}' AND password=crypt('${origPass}', password) RETURNING *`);
   },
 
   // =====>Threads<===== \\
