@@ -1,8 +1,8 @@
 const cryptico = require('cryptico');
 const BITS = 1024;
 
-function getPublicKeyFromEmail(email){
-  const rsa = cryptico.generateRSAKey(email,BITS);
+function getPublicKeyFromPhrase(phrase){
+  const rsa = cryptico.generateRSAKey(phrase,BITS);
   return cryptico.publicKeyString(rsa);
 }
 
@@ -12,6 +12,6 @@ function encryptMessage(text,publicKey){
 
 
 module.exports = {
-  getPublicKeyFromEmail,
+  getPublicKeyFromPhrase,
   encryptMessage
 }
