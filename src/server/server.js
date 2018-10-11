@@ -17,6 +17,11 @@ server.use(express.static(path.join(__dirname, '../../dist/static')));
 server.post('/signup', userController.createUser, authController.sendToken);
 server.post('/login', userController.verifyCreds, authController.sendToken);
 
+<<<<<<< HEAD
 server.post('/message',messageController.postMessage);
+=======
+app.use(express.static(path.join(__dirname, '../../dist/static')));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, '../.././dist/static/main.js')));
+>>>>>>> master
 
 server.listen(3000, () => console.log('Listening on port 3000'));
