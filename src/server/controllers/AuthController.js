@@ -11,7 +11,7 @@ class AuthController {
     if (token) {
       jwt.verify(token, this.secret, (err, decoded) => {
         if(err){
-          res.status(403).json({
+          res.status(401).json({
             message:"Wrong Token"
           });
         }else{
@@ -20,6 +20,12 @@ class AuthController {
         }
       });
     }
+    else{
+      res.status(401).json({
+        message:"no token"
+      });
+    }
+
   }
 
   sendToken(req,res,next) {
@@ -31,3 +37,5 @@ class AuthController {
     })
   }
 }
+
+module.exports = new AuthController();
