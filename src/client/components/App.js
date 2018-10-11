@@ -1,18 +1,32 @@
 import React from 'react';
-import { Route, Switch } from 'react-router';
+import { BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 
 import Main from './Main';
 import Login from './Login';
 import NavBar from './navBar/NavBar';
+import MessageContainer from './MessageContainer';
 
-const App = () => (
-  <div className="app">
-    <NavBar />
-    <Switch>
-      <Route path="/" component={Login} />
-      <Route exact path="/" component={Main} />
-    </Switch>
-  </div>
-);
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
+
+  render() {
+    return (
+      <div className="app">
+        <NavBar />
+        <Router>
+          <Switch>
+          <Route path="/" component={Login} />
+          <Route exact path="/Main" component={Main} />
+          <Route exact path="/Chat" componenet={MessageContainer} />
+        </Switch>
+        </Router>
+      </div>
+    );
+  }
+}
+
 
 export default App;

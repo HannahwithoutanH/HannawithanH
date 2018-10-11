@@ -1,16 +1,19 @@
-import react from 'react';
+import React from 'react';
 
-constructor() {
-  super()
-  this.state = {
-    messages: [];
+class SendMessage extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      message: ''
     }
-}
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
 
-render() {
-  return (
-    <div className="messages">
-      <
-    </div>
-  )
+  handleChange(event) {
+    this.setState({
+      message: event.target.value
+    })
+  }
 }
+export default SendMessage;
