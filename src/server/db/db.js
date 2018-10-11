@@ -68,6 +68,14 @@ module.exports = {
     return await db.query(`SELECT * FROM "Threads" WHERE id='${threadId}'`);
   },
 
+  /**
+   * @param {number} threadId Thread ID
+   */
+  getThreadPassword: async (threadId) => {
+    if (typeof threadId !== 'number') throw new Error('Invalid argument types');
+    return await db.query(`SELECT password FROM "Threads" WHERE id='${threadId}'`);
+  }
+
    /**
    * @param {number} threadId Thread ID
    * @param {string} password Thread password
