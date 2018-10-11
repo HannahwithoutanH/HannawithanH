@@ -1,23 +1,46 @@
 import React from 'react';
-//import '../styles/App.css';
+// import '../styles/App.css';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { username: '' };
+    this.state = {
+      username: '',
+      password: '',
+    };
 
     this.usernameChangeHandler = this.usernameChangeHandler.bind(this);
     this.usernameSubmitHandler = this.usernameSubmitHandler.bind(this);
+    this.passwordChangeHandler = this.passwordChangeHandler.bind(this);
   }
 
   usernameChangeHandler(event) {
     this.setState({ username: event.target.value });
   }
 
+  passwordChangeHandler(event) {
+    this.setState({ password: event.target.value });
+  }
+
+
   usernameSubmitHandler(event) {
     event.preventDefault();
-    this.setState({ submitted: true, username: this.state.username });
+    const data = new FormData(event.target)
+
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify(data),
+    })
   }
+
+  // passwordSubmitHandler(event) {
+  //   this.setState({ submitted: true, password: this.state.username });
+  //   event.preventDefault();
+  // }
+
 
   render() {
     if (this.state.submitted) {
@@ -27,17 +50,18 @@ class Login extends React.Component {
     }
 
     return (
-      <form onSubmit={this.usernameSubmitHandler} className="username-container">
-        <div>
-          <input
-            type="text"
-            onChange={this.usernameChangeHandler}
-            placeholder="username"
-            required
-          />
-        </div>
-        <input type="submit" value="Submit" />
-      </form>
+      <div className="Login">
+        <form onSubmit={this.usernameSubmitHandler}>
+          <label>User Name</label>
+          <input type="text" placeholder="username" value={this.state.username} onChange={this.usernameChangeHandler} />
+
+          <label>password</label>
+          <input type="text" placeholder="password" value={this.state.password} onChange={this.passwordChangeHandler} />
+
+          <input id="login" type="submit" value="Log In" />
+          <input id="signup" type="submit" value="Sign Up" />
+        </form>
+      </div>
     );
   }
 }
