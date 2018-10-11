@@ -11,11 +11,10 @@ class Login extends React.Component {
 
     this.usernameChangeHandler = this.usernameChangeHandler.bind(this);
     this.usernameSubmitHandler = this.usernameSubmitHandler.bind(this);
-    // this.passwordSubmitHandler = this.passwordSubmitHandler.bind(this);
+    this.passwordChangeHandler = this.passwordChangeHandler.bind(this);
   }
 
   usernameChangeHandler(event) {
-    console.log(event.target.value);
     this.setState({ username: event.target.value });
   }
 
@@ -26,6 +25,15 @@ class Login extends React.Component {
 
   usernameSubmitHandler(event) {
     event.preventDefault();
+    const data = new FormData(event.target)
+
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify(data),
+    })
   }
 
   // passwordSubmitHandler(event) {
@@ -50,8 +58,8 @@ class Login extends React.Component {
           <label>password</label>
           <input type="text" placeholder="password" value={this.state.password} onChange={this.passwordChangeHandler} />
 
-          <input type="submit" value="Log In" />
-          <input type="submit" value="Sign Up" />
+          <input id="login" type="submit" value="Log In" />
+          <input id="signup" type="submit" value="Sign Up" />
         </form>
       </div>
     );
