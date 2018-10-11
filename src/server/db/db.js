@@ -10,13 +10,13 @@ module.exports = {
     // column names in database
     const columns = ['name', 'email', 'password'];
     // invoke SQL command
-    return await db.query(`INSERT INTO "Users" (${columns.join(',')}) VALUES('${args.join("','")}') RETURNING *`);
+    return await db.query(`INSERT INTO "Users" (${columns.join(',')}) 
+    VALUES('${args[0]}', '${args[1]}', crypt('${args[2]}', gen_salt('bf'))) RETURNING *`);
   },
 
   getUser: async (email, password) => {
-    // need to ENCRYPT and check password here
     if (typeof email !== 'string' && typeof password !== 'string') throw new Error('Invalid argument types');
-    return await db.query(`SELECT * FROM "Users" WHERE email='${email}'`);
+    return await db.query(`SELECT * FROM "Users" WHERE email='${email}' AND password=crypt('${password}', password)`);
   },
 
   changeName: async (email, name) => {
@@ -25,51 +25,45 @@ module.exports = {
   },
 
   changePassword: async (email, origPass, newPass) => {
-    // must check old password and ENCRYPT new password
     if (typeof origPass !== 'string' && typeof email !== 'string') throw new Error('Invalid argument types');
-    return await db.query(`UPDATE "Users" SET password='${newPass}' WHERE email='${email}' AND password='${origPass}'`);
+    return await db.query(`UPDATE "Users" SET password=crypt('${newPass}', gen_salt('bf')) WHERE email='${email}' AND password=crypt('${origPass}', password)`);
   },
 
-
-
-
-
   // =====>Threads<===== \\
+
   addThread: async (...args) => {
     // two parameters must be passed
     if (args.length < 2) throw new Error('Must pass creator and password');
     // column names in database
     const columns = ['creator', 'password'];
     // invoke SQL command
-    return await db.query(`INSERT INTO "Threads" (${columns.join(',')}) VALUES((SELECT id FROM "Users" WHERE email='${args[0]}'), '${args[1]}') RETURNING *`);
+    return await db.query(`INSERT INTO "Threads" (${columns.join(',')}) VALUES((SELECT id FROM "Users" WHERE email='${args[0]}'), crypt('${args[1]}', gen_salt('bf')) ) RETURNING *`);
   },
 
   getThread: async (threadId, password) => {
-    // needs ENCRYPTing
     if (typeof threadId !== 'number' && typeof password !== 'string') throw new Error('Invalid argument types');
-    return await db.query(`SELECT * FROM "Threads" WHERE id='${threadId}' AND password='${password}'`);
+    return await db.query(`SELECT * FROM "Threads" WHERE id='${threadId}' AND password=crypt('${password}', password)`);
   },
 
   deleteThread: async (threadId, password) => {
     if (typeof threadId !== 'number' && typeof password !== 'string') throw new Error('Invalid argument types');
-    // return await db.query(`UPDATE "Events" SET status='cancelled' WHERE "Id"=${eventId}`);
+    // delete thread... can I delete this first?
+    await db.query(`DELETE FROM "Threads" WHERE id='${threadId}' AND password=crypt('${password}', password)`);
     // delete all memberships
+    await db.query(`DELETE FROM 'Messages' WHERE thread='${threadId}'`);
     // delete all messages
-    return await db.query(`DELETE FROM "Threads" WHERE id='${threadId}'`);
+    return await db.query(`DELETE FROM 'Memberships' WHERE thread='${threadId}'`);
   },
 
-
-
-
-
   // =====>Memberships<===== \\
+
   joinThread: async (threadId, threadPassword, userId) => {
     // column names in database
     const columns = ['thread', 'member'];
     // invoke SQL command
-    // NEED TO ADD TITLE TO CHATS and PASSword checking?
+    // this one is flawed, needs to be redone
     return await db.query(`INSERT INTO "Memberships" (${columns.join(',')}) 
-      VALUES((SELECT id FROM "Threads" WHERE password='${threadPassword}'), '${userId}') RETURNING *`);
+      VALUES((SELECT id FROM "Threads" WHERE id='${threadId}' AND password=crypt('${threadPassword}', password), '${userId}') RETURNING *`);
   },
 
   getThreadMembers: async (threadId) => {
@@ -91,11 +85,8 @@ module.exports = {
     return await db.query(`DELETE FROM "Memberships" WHERE thread='${threadId}'`);
   },
 
-
-
-
-
   // =====>Messages<===== \\
+
   writeMessage: async (...args) => {
     // six parameters must be passed
     if (args.length < 4) throw new Error('Must pass author, thread, time, and text');
@@ -108,15 +99,12 @@ module.exports = {
   deleteAllThreadMessages: async (threadId) => {
     if (typeof threadId !== 'number') throw new Error('Invalid argument types');
     // delete all messages in one thread
+    return await db.query(`DELETE FROM "Messages" WHERE thread='${threadId}'`);
   },
 
-  getAThreadsMessages: async (threadId, password) => {
+  getAThreadsMessages: async (threadId) => {
     if (typeof threadId !== 'number' && typeof password !== 'number') throw new Error('Invalid argument types');
     // check password and get messages
+    return await db.query(`SELECT * FROM "Messages" WHERE thread='${threadId}'`);
   }
-
-  // getEventsRSVPList: async (eventId) => {
-  //   if (typeof eventId !== 'number') throw new Error('Must pass a number');
-  //   return await db.query(`SELECT name, email, number FROM "RSVPS" LEFT JOIN "Users" ON "Users"."Id"="RSVPS".attendee WHERE event='${eventId}'`);
-  // },
 }
