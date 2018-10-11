@@ -22,7 +22,7 @@ class Login extends React.Component {
   render() {
     if (this.state.submitted) {
       return (
-        // homepage?
+        <div>hi</div>
       );
     }
 
