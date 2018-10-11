@@ -125,6 +125,18 @@ module.exports = {
       WHERE thread='${threadId}'`);
   },
 
+
+  /**
+   * @param {number} userId Thread ID
+   */
+  getUserMemberships: async (userId) => {
+    if (typeof userId !== 'number') throw new Error('Invalid argument type');
+    return await db.query(`SELECT thread FROM "Memberships"
+      WHERE member='${userId}'`);
+  },
+
+
+
   /**
    * @param {number} threadId Thread ID
    * @param {number} userId User ID
