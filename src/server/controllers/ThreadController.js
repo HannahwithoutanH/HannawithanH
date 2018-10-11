@@ -2,7 +2,7 @@
 const encrypt = require('../utils/crypt').encryptMessage;
 const db = require('../db/db');
 
-class MessageController {
+class ThreadController {
 
   async postMessage(req,res,next){
     const {threadId, userId, message} = req.body;
@@ -12,6 +12,10 @@ class MessageController {
     .then(()=>res.sendStatus(200))
     .catch(err=>res.send(err));
   }
+
+  getThreadsByUserId(req,res,next){
+    
+  }
 }
 
-module.exports = new MessageController();
+module.exports = new ThreadController();

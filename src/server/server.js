@@ -4,7 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const userController = require('./controllers/UserController');
 const authController = require('./controllers/AuthController');
-const messageController = require('./controllers/MessageController');
+const threadController = require('./controllers/ThreadController');
 
 const server = express();
 server.use(bodyParser.json());
@@ -17,11 +17,8 @@ server.use(express.static(path.join(__dirname, '../../dist/static')));
 server.post('/signup', userController.createUser, authController.sendToken);
 server.post('/login', userController.verifyCreds, authController.sendToken);
 
-<<<<<<< HEAD
-server.post('/message',messageController.postMessage);
-=======
-app.use(express.static(path.join(__dirname, '../../dist/static')));
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, '../.././dist/static/main.js')));
->>>>>>> master
+
+server.get('/threads', threadController.getThreadsByUserId)
+server.post('/message',threadController.postMessage);
 
 server.listen(3000, () => console.log('Listening on port 3000'));
