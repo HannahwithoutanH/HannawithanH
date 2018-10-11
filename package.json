@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
     "build": "webpack --mode development",
     "start": "webpack-dev-server --mode development --devtool inline-source-map --hot",
     "server": "nodemon ./src/server/server.js"
@@ -31,11 +30,16 @@
     "pg-promise": "^8.5.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "react-router": "^4.3.1",
     "react-router-dom": "^4.2.2",
     "webpack-cli": "^3.1.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
     "@zeit/next-css": "^1.0.1",
+    "babel-loader": "^8.0.4",
     "jest": "^23.6.0",
     "supertest": "^3.3.0",
     "webpack": "^4.20.2",
