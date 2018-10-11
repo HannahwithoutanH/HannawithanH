@@ -1,6 +1,6 @@
 const pgp = require('pg-promise')();
 
-// const db = pgp(process.env.ELEPHANT_SQL);
+const db = pgp(process.env.ELEPHANT_SQL);
 
 module.exports = {
   // =====>Users<===== \\
@@ -10,12 +10,12 @@ module.exports = {
    */
   addUser: async (...args) => {
     // six parameters must be passed
-    if (args.length < 4) throw new Error('Must pass name, email, password, and publicKey');
+    if (args.length < 3) throw new Error('Must pass name, email, password');
     // column names in database
-    const columns = ['name', 'email', 'password', 'publicKey'];
+    const columns = ['name', 'email', 'password'];
     // invoke SQL command
     return await db.query(`INSERT INTO "Users" (${columns.join(',')}) 
-    VALUES('${args[0]}', '${args[1]}', crypt('${args[2]}', gen_salt('bf')), '${args[3]}') RETURNING *`);
+    VALUES('${args[0]}', '${args[1]}', crypt('${args[2]}', gen_salt('bf'))) RETURNING *`);
   },
 
   /**
@@ -49,7 +49,7 @@ module.exports = {
   // =====>Threads<===== \\
 
   /**
-   * @param {...string} args Creator and password
+   * @param {...string} args user email and thread password
    */
   addThread: async (...args) => {
     // two parameters must be passed
@@ -57,16 +57,15 @@ module.exports = {
     // column names in database
     const columns = ['creator', 'password'];
     // invoke SQL command
-    return await db.query(`INSERT INTO "Threads" (${columns.join(',')}) VALUES((SELECT id FROM "Users" WHERE email='${args[0]}'), crypt('${args[1]}', gen_salt('bf')) ) RETURNING *`);
+    return await db.query(`INSERT INTO "Threads" (${columns.join(',')}) VALUES((SELECT id FROM "Users" WHERE email='${args[0]}'), '${args[1]}') RETURNING *`);
   },
 
   /**
    * @param {number} threadId Thread ID
-   * @param {string} password Thread password
    */
-  getThread: async (threadId, password) => {
-    if (typeof threadId !== 'number' && typeof password !== 'string') throw new Error('Invalid argument types');
-    return await db.query(`SELECT * FROM "Threads" WHERE id='${threadId}' AND password=crypt('${password}', password)`);
+  getThread: async (threadId) => {
+    if (typeof threadId !== 'number') throw new Error('Invalid argument types');
+    return await db.query(`SELECT * FROM "Threads" WHERE id='${threadId}'`);
   },
 
    /**
@@ -76,7 +75,7 @@ module.exports = {
   deleteThread: async (threadId, password) => {
     if (typeof threadId !== 'number' && typeof password !== 'string') throw new Error('Invalid argument types');
     // delete thread... can I delete this first?
-    await db.query(`DELETE FROM "Threads" WHERE id='${threadId}' AND password=crypt('${password}', password)`);
+    await db.query(`DELETE FROM "Threads" WHERE id='${threadId}' AND password='${password}'`);
     // delete all memberships
     await db.query(`DELETE FROM 'Messages' WHERE thread='${threadId}'`);
     // delete all messages
@@ -88,15 +87,16 @@ module.exports = {
    /**
    * @param {number} threadId Thread ID
    * @param {string} threadPassword Thread password
-   * @param {number} userId User ID
+   * @param {number} userEmail User Email
    */
-  joinThread: async (threadId, threadPassword, userId) => {
+  joinThread: async (threadId, threadPassword, userEmail) => {
     // column names in database
     const columns = ['thread', 'member'];
     // invoke SQL command
     // this one is flawed, needs to be redone
     return await db.query(`INSERT INTO "Memberships" (${columns.join(',')}) 
-      VALUES((SELECT id FROM "Threads" WHERE id='${threadId}' AND password=crypt('${threadPassword}', password), '${userId}') RETURNING *`);
+      VALUES((SELECT id FROM "Threads" WHERE id='${threadId}' AND password='${threadPassword}'), 
+      (SELECT id FROM "Users" WHERE email='${userEmail}')) RETURNING *`);
   },
 
   /**
@@ -131,13 +131,15 @@ module.exports = {
   // =====>Messages<===== \\
 
   /**
-   * @param {...any} args Author, thread, time, text
+   * @param {...any} args User Id, thread Id, text
    */
+
+  // 
   writeMessage: async (...args) => {
     // six parameters must be passed
-    if (args.length < 4) throw new Error('Must pass author, thread, time, text (recipientId optional)');
+    if (args.length < 3) throw new Error('Must pass author, thread, text, (recipientId optional)');
     // column names in database
-    const columns = ['author', 'thread', 'time', 'text', 'recipientId'];
+    const columns = ['author', 'thread', 'text'];
     // invoke SQL command
     return await db.query(`INSERT INTO "Messages" (${columns.join(',')}) VALUES('${args.join("','")}') RETURNING *`);
   },
