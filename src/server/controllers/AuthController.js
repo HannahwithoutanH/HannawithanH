@@ -27,6 +27,7 @@ class AuthController {
     const token = jwt.sign({userId},this.secret)
     res.json({
       token:token,
+      message:"Authenticated, token given",
     })
   }
 }

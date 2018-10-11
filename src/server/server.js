@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const userController = require('./controllers/UserController');
 const authController = require('./controllers/AuthController');
 const threadController = require('./controllers/ThreadController');
+const router = express.Router();
 
 const server = express();
 server.use(bodyParser.json());
@@ -12,6 +13,7 @@ server.use(bodyParser.urlencoded({
   extended: true
 }));
 server.use(express.static(path.join(__dirname, '../../dist/static')));
+server.use(authController.checkToken);
 
 
 server.post('/signup', userController.createUser, authController.sendToken);
