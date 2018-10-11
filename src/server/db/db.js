@@ -1,6 +1,6 @@
 const pgp = require('pg-promise')();
 
-const db = pgp(process.env.ELEPHANT_SQL);
+// const db = pgp(process.env.ELEPHANT_SQL);
 
 module.exports = {
   // =====>Users<===== \\
@@ -10,12 +10,12 @@ module.exports = {
    */
   addUser: async (...args) => {
     // six parameters must be passed
-    if (args.length < 3) throw new Error('Must pass name, email, and password');
+    if (args.length < 4) throw new Error('Must pass name, email, password, and publicKey');
     // column names in database
-    const columns = ['name', 'email', 'password'];
+    const columns = ['name', 'email', 'password', 'publicKey'];
     // invoke SQL command
     return await db.query(`INSERT INTO "Users" (${columns.join(',')}) 
-    VALUES('${args[0]}', '${args[1]}', crypt('${args[2]}', gen_salt('bf'))) RETURNING *`);
+    VALUES('${args[0]}', '${args[1]}', crypt('${args[2]}', gen_salt('bf')), '${args[3]}') RETURNING *`);
   },
 
   /**
@@ -135,9 +135,9 @@ module.exports = {
    */
   writeMessage: async (...args) => {
     // six parameters must be passed
-    if (args.length < 4) throw new Error('Must pass author, thread, time, and text');
+    if (args.length < 4) throw new Error('Must pass author, thread, time, text (recipientId optional)');
     // column names in database
-    const columns = ['author', 'thread', 'time', 'text'];
+    const columns = ['author', 'thread', 'time', 'text', 'recipientId'];
     // invoke SQL command
     return await db.query(`INSERT INTO "Messages" (${columns.join(',')}) VALUES('${args.join("','")}') RETURNING *`);
   },
