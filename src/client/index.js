@@ -1,5 +1,9 @@
 import React from 'react';
-import { ReactDOM, render } from 'react-dom';
+import ReactDOM from 'react-dom';
 
 
-render(<h1>greg</h1>, document.getElementById('root'));
+import Root from './components/Root';
+// import './index.css';
+
+
+ReactDOM.render(<Root />, document.getElementById('root'));
