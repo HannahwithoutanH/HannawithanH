@@ -9,9 +9,9 @@ module.exports = {
     path: path.resolve(__dirname, 'dist', 'static'),
   },
   devServer: {
-    contentBase: "./dist/static",
-    hot: true
-},
+    contentBase: './dist/static',
+    hot: true,
+  },
   module: {
     rules: [
       {
@@ -30,19 +30,19 @@ module.exports = {
   plugins: [
     new WorkboxPlugin.GenerateSW({
       runtimeCaching: [
-          {
-              urlPattern: /images/,
-              handler: 'cacheFirst'
-          },
-          {
-              urlPattern: new RegExp('^https://fonts.(?:googleapis|gstatic).com/(.*)'),
-              handler: 'cacheFirst'
-          },
-          {
-              urlPattern: /.*/,
-              handler: 'networkFirst'
-          }
-      ]
-  })
-  ]
+        {
+          urlPattern: /images/,
+          handler: 'cacheFirst',
+        },
+        {
+          urlPattern: new RegExp('^https://fonts.(?:googleapis|gstatic).com/(.*)'),
+          handler: 'cacheFirst',
+        },
+        {
+          urlPattern: /.*/,
+          handler: 'networkFirst',
+        },
+      ],
+    }),
+  ],
 };

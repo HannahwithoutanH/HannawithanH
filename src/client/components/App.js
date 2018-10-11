@@ -3,12 +3,14 @@ import { Route, Switch } from 'react-router';
 
 import Main from './Main';
 import Login from './Login';
+import NavBar from './navBar/NavBar';
 
 const App = () => (
   <div className="app">
+    <NavBar />
     <Switch>
-      <Route exact path="/" component={Main} />
-      <Route path="/Login" component={Login} />
+      <Route path="/" component={Login} />
+      <Route exact path="/Main" component={Main} />
     </Switch>
   </div>
 );
