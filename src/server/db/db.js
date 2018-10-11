@@ -29,6 +29,14 @@ module.exports = {
 
   /**
    * @param {string} email User email
+   */
+  getUserId: async (email) => {
+    if (typeof email !== 'string') throw new Error('Invalid argument types');
+    return await db.query(`SELECT id FROM "Users" WHERE email='${email}'`);
+  },
+
+  /**
+   * @param {string} email User email
    * @param {string} name User name
    */
   changeName: async (email, name) => {
@@ -74,7 +82,7 @@ module.exports = {
   getThreadPassword: async (threadId) => {
     if (typeof threadId !== 'number') throw new Error('Invalid argument types');
     return await db.query(`SELECT password FROM "Threads" WHERE id='${threadId}'`);
-  }
+  },
 
    /**
    * @param {number} threadId Thread ID
