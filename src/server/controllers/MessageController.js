@@ -9,7 +9,7 @@ class MessageController {
     threadPubKey = await db.getThreadPublicKey(threadId)
     encryptedMessage = encrypt(message,threadPubKey)
     db.writeMessage(userId,threadId,encryptedMessage)
-    .then(()=>next())
+    .then(()=>res.sendStatus(200))
     .catch(err=>res.send(err));
   }
 }

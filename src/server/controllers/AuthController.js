@@ -5,6 +5,7 @@ class AuthController {
   constructor(){
     this.secret = process.env.JWT_SECRET;
   }
+
   checkToken(req,res,next) {
     const token = req.headers["x-access-token"];
     if (token) {
@@ -14,7 +15,7 @@ class AuthController {
             message:"Wrong Token"
           });
         }else{
-          req.decoded=decod;
+          req.decoded=decoded;
           next();
         }
       });
@@ -22,8 +23,8 @@ class AuthController {
   }
 
   sendToken(req,res,next) {
-    const username = req.body.username;
-    const token = jwt.sign({username},this.secret)
+    const userId = res.locals.userId;
+    const token = jwt.sign({userId},this.secret)
     res.json({
       token:token,
     })

@@ -18,7 +18,7 @@ class UserController {
   verifyCreds(req,res,next){
     const {email, password} = req.body;
     db.getUser(email,password)
-    .then(next())
+    .then(user=>{res.locals.userid = user[0].id; next()})
     .catch(err=>res.send(err));
   }
 }
