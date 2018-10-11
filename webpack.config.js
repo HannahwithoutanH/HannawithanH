@@ -27,22 +27,22 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new WorkboxPlugin.GenerateSW({
-      runtimeCaching: [
-        {
-          urlPattern: /images/,
-          handler: 'cacheFirst',
-        },
-        {
-          urlPattern: new RegExp('^https://fonts.(?:googleapis|gstatic).com/(.*)'),
-          handler: 'cacheFirst',
-        },
-        {
-          urlPattern: /.*/,
-          handler: 'networkFirst',
-        },
-      ],
-    }),
-  ],
+  // plugins: [
+  //   new WorkboxPlugin.GenerateSW({
+  //     runtimeCaching: [
+  //       {
+  //         urlPattern: /images/,
+  //         handler: 'cacheFirst',
+  //       },
+  //       {
+  //         urlPattern: new RegExp('^https://fonts.(?:googleapis|gstatic).com/(.*)'),
+  //         handler: 'cacheFirst',
+  //       },
+  //       {
+  //         urlPattern: /.*/,
+  //         handler: 'networkFirst',
+  //       },
+  //     ],
+  //   }),
+  // ],
 };
