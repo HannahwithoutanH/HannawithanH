@@ -13,8 +13,18 @@ class ThreadController {
     .catch(err=>res.send(err));
   }
 
-  getThreadsByUserId(req,res,next){
-    
+  getThreadsByUserId(req,res){
+    const {userId} = req.body;
+    db.getUserMemberships(userId)
+    .then(threads => res.json(threads))
+    .catch(err => res.send(err)); 
+  }
+  
+  getThreadMessages(req,res){
+    const threadId = req.query.threadId;
+    db.getAThreadsMessages(threadId)
+    .then(messages => res.json(messages))
+    .catch(err => res.send(err));
   }
 }
 

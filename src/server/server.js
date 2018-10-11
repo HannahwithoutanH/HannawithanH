@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 const userController = require('./controllers/UserController');
 const authController = require('./controllers/AuthController');
 const threadController = require('./controllers/ThreadController');
-const router = express.Router();
 
 const server = express();
 server.use(bodyParser.json());
@@ -21,6 +20,7 @@ server.post('/login', userController.verifyCreds, authController.sendToken);
 
 
 server.get('/threads', threadController.getThreadsByUserId)
+server.get('/thread', threadController.getThreadMessages);
 server.post('/message',threadController.postMessage);
 
 server.listen(3000, () => console.log('Listening on port 3000'));
