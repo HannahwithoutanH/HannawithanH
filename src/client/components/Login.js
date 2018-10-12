@@ -12,6 +12,7 @@ class Login extends React.Component {
     this.usernameChangeHandler = this.usernameChangeHandler.bind(this);
     this.usernameSubmitHandler = this.usernameSubmitHandler.bind(this);
     this.passwordChangeHandler = this.passwordChangeHandler.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
   }
 
   usernameChangeHandler(event) {
@@ -25,8 +26,27 @@ class Login extends React.Component {
 
   usernameSubmitHandler(event) {
     event.preventDefault();
-    const credentials = new FormData(event.target);
+    const credentials = {
+      email: this.state.username,
+      password: this.state.password,
+    };
 
+    fetch('/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: JSON.stringify(credentials),
+    }).then(res => res.json())
+      .then(jsonRes => window.localStorage.setItem('token', jsonRes.token))
+      .catch(err=>alert(err));
+  }
+
+  handleLogin() {
+    const credentials = {
+      email: this.state.username,
+      password: this.state.password,
+    };
     fetch('/login', {
       method: 'POST',
       headers: {
@@ -34,12 +54,12 @@ class Login extends React.Component {
       },
       body: JSON.stringify(credentials),
     })
-      .then((res) => {
-        res.json();
-      })
+      .then(res => res.json())
       .then((jsonRes) => {
-        window.localStorage.setItem('token', jsonRes.body.token);
-      });
+        if (jsonRes.token)window.localStorage.setItem('token', jsonRes.token);
+        else alert('invalid credentials');
+      })
+      .catch(err => console.error(err));
   }
 
   // passwordSubmitHandler(event) {
@@ -70,9 +90,12 @@ password
           </label>
           <input type="text" placeholder="password" value={this.state.password} onChange={this.passwordChangeHandler} />
 
-          <input id="login" type="submit" value="Log In" />
+
           <input id="signup" type="submit" value="Sign Up" />
         </form>
+        <button id="login" onClick={this.handleLogin}>
+Login
+        </button>
       </div>
     );
   }

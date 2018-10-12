@@ -30,7 +30,7 @@ class AuthController {
 
   sendToken(req,res,next) {
     const userId = res.locals.userId;
-    const token = jwt.sign({userId},this.secret)
+    const token = jwt.sign({userId},process.env.JWT_SECRET)
     res.json({
       token:token,
       message:"Authenticated, token given",
