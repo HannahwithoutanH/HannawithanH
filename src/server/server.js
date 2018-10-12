@@ -12,11 +12,13 @@ server.use(bodyParser.urlencoded({
   extended: true
 }));
 server.use(express.static(path.join(__dirname, '../../dist/static')));
-server.use(authController.checkToken);
+
 
 
 server.post('/signup', userController.createUser, authController.sendToken);
 server.post('/login', userController.verifyCreds, authController.sendToken);
+
+server.use(authController.checkToken);
 
 
 server.get('/threads', threadController.getThreadsByUserId)
