@@ -20,7 +20,7 @@ class App extends React.Component {
           <Switch>
           <Route path="/" component={Login} />
           <Route exact path="/Main" component={Main} />
-          <Route exact path="/Chat" componenet={MessageContainer} />
+          <Route exact path="/Chat" component={MessageContainer} />
         </Switch>
         </Router>
       </div>

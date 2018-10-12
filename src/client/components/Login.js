@@ -25,15 +25,21 @@ class Login extends React.Component {
 
   usernameSubmitHandler(event) {
     event.preventDefault();
-    const data = new FormData(event.target)
+    const credentials = new FormData(event.target);
 
     fetch('/login', {
       method: 'POST',
       headers: {
-        "Content-Type": "application/json; charset=utf-8"
+        'Content-Type': 'application/json; charset=utf-8',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(credentials),
     })
+      .then((res) => {
+        res.json();
+      })
+      .then((jsonRes) => {
+        window.localStorage.setItem('token', jsonRes.body.token);
+      });
   }
 
   // passwordSubmitHandler(event) {
@@ -45,17 +51,23 @@ class Login extends React.Component {
   render() {
     if (this.state.submitted) {
       return (
-        <div>hi</div>
+        <div>
+hi
+        </div>
       );
     }
 
     return (
       <div className="Login">
         <form onSubmit={this.usernameSubmitHandler}>
-          <label>User Name</label>
+          <label>
+User Name
+          </label>
           <input type="text" placeholder="username" value={this.state.username} onChange={this.usernameChangeHandler} />
 
-          <label>password</label>
+          <label>
+password
+          </label>
           <input type="text" placeholder="password" value={this.state.password} onChange={this.passwordChangeHandler} />
 
           <input id="login" type="submit" value="Log In" />

@@ -17,6 +17,16 @@ class MessageContainer extends React.Component {
       }],
     };
   }
+  
+  componentDidMount() {
+    fetch('./threads', {
+      headers: {
+        'x-access-token': window.localStorage.getItem('token'),
+      }
+    })
+
+  }
+  
 
   render() {
     return (

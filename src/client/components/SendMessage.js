@@ -12,7 +12,7 @@ class SendMessage extends React.Component {
 
   handleChange(event) {
     this.setState({
-      message: event.target.value
+      message: event.target.value,
     });
   }
 
@@ -35,7 +35,7 @@ class SendMessage extends React.Component {
           placeholder="Type your message and hit Enter"
           type="text" />
         </form>
-    )
+    );
   }
 }
 export default SendMessage;
